@@ -1,0 +1,253 @@
+\ProvidesPackage{fil}[Beamer Theme for FIL Weekly Reporting by NPTH.]
+
+% ================================================================================
+% Packages
+% ================================================================================
+
+\RequirePackage{tikz}
+\RequirePackage{xcolor}
+\RequirePackage{amsmath}
+\RequirePackage{amsfonts}
+\RequirePackage{verbatim}
+\RequirePackage{hyperref}
+\RequirePackage{listings}
+\RequirePackage{tcolorbox}
+\RequirePackage[export]{adjustbox}
+
+% ================================================================================
+% Color Accents
+% ================================================================================
+
+\definecolor{mainblue}{HTML}{345E9C}
+\definecolor{mainblue2}{HTML}{3E70BB}
+\definecolor{maingrey}{HTML}{58595B}
+\definecolor{skyblue}{HTML}{6BA4B8}
+\definecolor{lightblue}{HTML}{5288D7}
+\definecolor{lightgrey}{HTML}{CCCCCC}
+
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{author}{fg=white}
+\setbeamercolor{date}{fg=white}
+\setbeamercolor{head}{bg=mainblue2}
+
+\setbeamercolor{alerted text}{fg=mainblue}
+\setbeamercolor{normal text}{fg=darkgray,bg=white}
+\setbeamercolor{structure}{fg=mainblue}
+
+\setbeamercolor{jumbo}{bg=mainblue}
+
+\hypersetup{
+	colorlinks,
+	linkcolor=mainblue,
+	anchorcolor=navyblue,
+	citecolor=blue!80,
+	urlcolor=skyblue,
+}
+
+%\setbeamercolor{block title}{fg=airforceblue,bg=morelightgray}
+%\setbeamercolor{block body}{fg=darkgray,bg=morelightgray}
+
+% ================================================================================
+% Fonts
+% ================================================================================
+
+\setbeamerfont{author}{size=\small}
+\setbeamerfont{date}{size=\footnotesize}
+\setbeamerfont{title}{series=\bfseries, size=\Large}
+\setbeamerfont{subtitle}{series=\mdseries,size=\normalsize}
+
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamerfont{framesubtitle}{series=\mdseries}
+\setbeamerfont{footline}{size=\scriptsize}
+\setbeamerfont{block title}{series=\centering, size=\small}
+\setbeamerfont{block body}{size=\scriptsize}
+
+\usefonttheme{professionalfonts}
+
+% ================================================================================
+% Basic Settings
+% ================================================================================
+
+% cancel navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
+% prettier boxes
+\setbeamertemplate{blocks}[rounded]
+
+% bullet points
+\setbeamertemplate{itemize item}{\textbullet}
+\setbeamertemplate{itemize subitem}{\textemdash}
+\setbeamertemplate{itemize subsubitem}{\ensuremath{\circ}}
+
+% paragraph spacing
+\setlength{\parskip}{10pt}
+
+% code environment
+\lstdefinestyle{mystyle}{
+    frame=tb,
+    aboveskip=3mm,
+    belowskip=3mm,
+    commentstyle=\color{skyblue},
+    keywordstyle=\color{purple},
+    stringstyle=\color{violet},
+    basicstyle=\ttfamily,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    xleftmargin=10pt,
+    xrightmargin=10pt,
+}
+\lstset{style=mystyle}
+
+% keywords
+\newtcbox{\keyword}[1][lightgray]{
+    on line, 
+    arc=2pt,
+    colback=#1!10!white,
+    colframe=#1!50!black,
+    boxrule=0pt,
+    boxsep=0pt,
+    left=2pt,
+    right=2pt,
+    top=2pt,
+    bottom=2pt,
+}
+
+% ================================================================================
+% Slide Templates
+% ================================================================================
+
+% headline for all frames
+\setbeamertemplate{headline}{
+	\ifnum\theframenumber=1
+		% not display the headline for the title page
+	\else
+		\begin{beamercolorbox}[wd=\paperwidth,ht=40pt]{head}
+			\hspace{400pt}\includegraphics[width=40pt]{source/logo-white.pdf}
+		\end{beamercolorbox}
+	\fi
+}
+
+% frame title and subtitle
+\setbeamertemplate{frametitle}{
+    \begin{picture}(0,0)
+        \ifx\insertframesubtitle\@empty%
+            \put(0,25){\usebeamerfont{frametitle}\usebeamercolor[fg]{title}\insertframetitle}
+		\else%
+			\put(0,38){\usebeamerfont{framesubtitle}\usebeamercolor[fg]{title}\insertframesubtitle}
+            \put(0,22){\usebeamerfont{frametitle}\usebeamercolor[fg]{title}\insertframetitle}
+		\fi
+    \end{picture}
+}
+
+% title page
+\setbeamertemplate{title page}{
+	\begin{picture}(0,0)
+		\put(-18,72){\includegraphics[width=140pt]{source/logo-name}}
+        \put(-5,-77){
+            \begin{beamercolorbox}[wd=1.1\paperwidth,ht=140pt]{jumbo}
+            \end{beamercolorbox}
+        }
+        \put(280,-118){\includegraphics[width=140pt]{source/tagline}}
+		\put(0,25){%
+			\begin{minipage}{400pt}
+				\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par
+				\vspace{12pt}
+				\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle
+			\end{minipage}
+		}
+		\put(0,-45){%
+			\usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor
+		}
+		\put(0,-60){%
+			\usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate
+		}
+	\end{picture}
+}
+
+\usetikzlibrary{calc}
+\makeatletter
+\def\progressbar@progressbar{} % the progress bar
+\newcount\progressbar@tmpcounta% auxiliary counter
+\newcount\progressbar@tmpcountb% auxiliary counter
+\newdimen\progressbar@pbht %progressbar height
+\newdimen\progressbar@pbwd %progressbar width
+\newdimen\progressbar@tmpdim % auxiliary dimension
+\progressbar@pbwd=\paperwidth
+\progressbar@pbht=2pt
+
+% the progress bar
+\def\progressbar@progressbar{
+    \progressbar@tmpcounta= \insertframenumber
+    \progressbar@tmpcountb=\inserttotalframenumber      
+    \progressbar@tmpdim=.5\progressbar@pbwd
+    \multiply\progressbar@tmpdim by \progressbar@tmpcounta
+    \divide\progressbar@tmpdim by \progressbar@tmpcountb
+    \progressbar@tmpdim=2\progressbar@tmpdim
+    \begin{tikzpicture}
+        \shade[top color=lightgrey,bottom color=lightgrey,middle color=lightgrey]
+        (0pt, 0pt) rectangle ++ (\progressbar@pbwd, \progressbar@pbht);
+        \shade[top color=mainblue,bottom color=mainblue,middle color=mainblue]
+        (0pt, 0pt) rectangle ++ (\progressbar@tmpdim, \progressbar@pbht);
+    \end{tikzpicture}
+}
+
+\defbeamertemplate{footline}{progress bar}{
+	\ifnum\theframenumber=1
+	\else
+		\begin{beamercolorbox}[wd=\paperwidth,ht=1.5ex,center,dp=0ex]{white}
+        \progressbar@progressbar
+        \end{beamercolorbox}
+	\fi
+}
+
+\setbeamertemplate{footline}[progress bar]
+
+% last frame
+\newcommand{\backmatter}{
+    \begingroup
+	   \setbeamertemplate{headline}{}
+	   \setbeamertemplate{footline}[progress bar]
+	   \begin{frame}[c]{}
+		  \begin{picture}(0,0)
+			 \put(-28.5,-125.5){\includegraphics[width=\paperwidth]{source/last-frame}}
+		  \end{picture}
+	   \end{frame}
+    \endgroup
+}
+
+% style of sections and subsections in ToCs
+\setbeamertemplate{section in toc}{
+	$\blacktriangleright$~\inserttocsection
+}
+\setbeamertemplate{subsection in toc}{
+    \hspace{16pt}{\small \inserttocsubsection}\\
+    \vspace{8pt}
+}
+\setbeamertemplate{frametitle continuation}{}
+
+% begin of sections
+\AtBeginSection[]
+{
+    \begingroup
+    \begin{frame}{Nội dung chính}{}
+        \tableofcontents[currentsection]
+    \end{frame}
+    \endgroup
+}
+
+% begin of subsections
+\AtBeginSubsection[]
+{
+    \begingroup
+    \begin{frame}{Nội dung chính}{}
+        \tableofcontents[currentsection, currentsubsection]
+    \end{frame}
+    \endgroup
+}
