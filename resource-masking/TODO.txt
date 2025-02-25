@@ -1,3 +1,0 @@
-- Logging lost values of training process
-- Split traffic generotor into another thread
-- Change state into contaienr state + number rejected request + number acepted request
